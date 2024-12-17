@@ -63,7 +63,7 @@ const Dashboard = () => {
             data: {
               labels: response.map(item => item.date),
               datasets: [{
-                label: 'Vendas',
+                label: 'Sales',
                 data: response.map(item => 
                   typeof item.sum === 'string' ? parseFloat(item.sum) : item.sum
                 ),
