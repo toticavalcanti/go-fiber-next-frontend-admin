@@ -1,4 +1,7 @@
 /* src/app/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 body {
   margin: 0;
   font-size: 0.875rem;
@@ -18,44 +21,53 @@ code {
   top: 0;
   bottom: 0;
   left: 0;
-  z-index: 100; /* Behind the navbar */
-  padding: 48px 0 0; /* Height of navbar */
+  width: 250px; /* Largura fixa do sidebar */
+  z-index: 100;
+  padding: 48px 0 0;
+  background-color: #f8f9fa;
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
-}
-
-@media (max-width: 767.98px) {
-  .sidebar {
-    top: 5rem;
-  }
-}
-
-.sidebar-sticky {
-  position: relative;
-  top: 0;
-  height: calc(100vh - 48px);
-  padding-top: 0.5rem;
-  overflow-x: hidden;
-  overflow-y: auto; /* Scrollable contents */
+  overflow-y: auto;
 }
 
 .sidebar .nav-link {
   font-weight: 500;
   color: #333;
+  display: block;
+  padding: 0.5rem 1rem;
 }
 
-.sidebar .nav-link.active {
+.sidebar .nav-link.active,
+.sidebar .nav-link:hover {
   color: #007bff;
+  background-color: rgba(0, 123, 255, 0.1);
 }
 
 /* Navbar */
 .navbar-brand {
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+  padding: 0.75rem 1rem;
   font-size: 1rem;
   background-color: rgba(0, 0, 0, 0.25);
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25);
 }
 
-.btn {
-  width: 70px;
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Main Content */
+.main {
+  margin-left: 250px;
+  padding: 1rem;
+}
+
+@media (max-width: 767.98px) {
+  .sidebar {
+    display: none; /* Esconde a sidebar em telas pequenas */
+  }
+
+  .main {
+    margin-left: 0;
+  }
 }

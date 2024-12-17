@@ -27,7 +27,7 @@ export function middleware(request: NextRequest) {
 
   // Se não tiver token e não for página pública, redireciona para login
   if (!token && !isPublicPage) {
-    const loginUrl = new URL('/auth/login', request.url);
+    const loginUrl = new URL('/login', request.url);
     loginUrl.searchParams.set('from', pathname);
     return NextResponse.redirect(loginUrl);
   }

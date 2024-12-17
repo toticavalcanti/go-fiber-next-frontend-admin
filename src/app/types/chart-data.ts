@@ -1,4 +1,4 @@
 export interface ChartData {
-    date: string;
-    sum: number;
-  }
+  date: string;
+  sum: number | string;
+}

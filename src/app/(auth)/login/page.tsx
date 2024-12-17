@@ -5,18 +5,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/app/lib/store/configureStore';
 import { api } from '@/app/lib/api/fetch';
+import type { LoginResponse } from '@/app/types/auth';
 import styles from '@/app/styles/auth.module.css';
-
-interface LoginResponse {
-  user: {
-    id: number;
-    first_name: string;
-    last_name: string;
-    email: string;
-    role_id: number;
-  };
-  token: string;
-}
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -30,21 +20,33 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
+  
     try {
-      const response = await api.post<LoginResponse>('/login', {
-        email,
-        password
-      });
-
-      console.log('Login successful:', response);
-      
-      // Dispatcha a ação de login bem-sucedido
+      const response = await api.post<LoginResponse, { email: string; password: string }>(
+        '/login',
+        { email, password }
+      );
+  
+      console.log('Server Response:', response);
+  
+      // Garantir valores padrão para evitar falhas
+      const token = response.token ?? null;
+      const user = response.user ?? { id: 0, email: '', role_id: 0 };
+  
+      if (!token) {
+        throw new Error('Missing token in response');
+      }
+  
+      console.log('Token:', token);
+      console.log('User (fallback applied):', user);
+  
+      // Disparar ação para o Redux/Store
       dispatch({
         type: 'auth/loginSuccess',
-        payload: response
+        payload: { token, user },
       });
-
+  
+      // Redirecionar para o dashboard
       router.push('/dashboard');
     } catch (err) {
       console.error('Login Error:', err);
@@ -53,6 +55,7 @@ export default function Login() {
       setLoading(false);
     }
   };
+   
 
   return (
     <div className={styles.container}>
@@ -85,12 +88,6 @@ export default function Login() {
           {loading ? 'Loading...' : 'Sign In'}
         </button>
       </form>
-      <div className="text-center mt-3">
-        <span>Don&apos;t have an account? </span>
-        <a href="/register" className="text-blue-500 hover:underline">
-          Register here
-        </a>
-      </div>
     </div>
   );
 }

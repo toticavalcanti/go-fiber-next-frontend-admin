@@ -4,66 +4,41 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAppSelector } from '@/app/lib/store/configureStore';
-import styles from './styles.module.css';
 
 export default function Menu() {
   const pathname = usePathname();
   const { user } = useAppSelector((state) => state.auth);
 
-  return (
-    <nav className={`${styles.sidebar} col-md-3 col-lg-2 d-md-block bg-light`}>
-      <div className={styles.sidebarSticky}>
-        <ul className="nav flex-column">
-          <li className="nav-item">
-            <Link
-              href="/dashboard"
-              className={`${styles.navLink} nav-link ${pathname === '/dashboard' ? styles.active : ''}`}
-            >
-              Dashboard
-            </Link>
-          </li>
+  // src/app/components/common/Menu/index.tsx
 
-          {user?.role?.name === 'admin' && (
-            <>
-              <li className="nav-item">
+return (
+  <aside className="fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] bg-gray-800 text-white overflow-y-auto">
+    <nav className="py-4">
+      <ul className="space-y-1 px-2">
+        <li>
+          <Link href="/dashboard" className={`block px-4 py-2 rounded hover:bg-gray-700 transition-colors
+            ${pathname === '/dashboard' ? 'bg-gray-700' : ''}`}>
+            Dashboard
+          </Link>
+        </li>
+
+        {user?.role?.name === 'admin' && (
+          <>
+            {['Orders', 'Products', 'Users', 'Roles'].map((item) => (
+              <li key={item.toLowerCase()}>
                 <Link
-                  href="/dashboard/orders"
-                  className={`${styles.navLink} nav-link ${pathname?.includes('/orders') ? styles.active : ''}`}
+                  href={`/dashboard/${item.toLowerCase()}`}
+                  className={`block px-4 py-2 rounded hover:bg-gray-700 transition-colors
+                    ${pathname?.includes(item.toLowerCase()) ? 'bg-gray-700' : ''}`}
                 >
-                  Orders
+                  {item}
                 </Link>
               </li>
-
-              <li className="nav-item">
-                <Link
-                  href="/dashboard/products"
-                  className={`${styles.navLink} nav-link ${pathname?.includes('/products') ? styles.active : ''}`}
-                >
-                  Products
-                </Link>
-              </li>
-
-              <li className="nav-item">
-                <Link
-                  href="/dashboard/users"
-                  className={`${styles.navLink} nav-link ${pathname?.includes('/users') ? styles.active : ''}`}
-                >
-                  Users
-                </Link>
-              </li>
-
-              <li className="nav-item">
-                <Link
-                  href="/dashboard/roles"
-                  className={`${styles.navLink} nav-link ${pathname?.includes('/roles') ? styles.active : ''}`}
-                >
-                  Roles
-                </Link>
-              </li>
-            </>
-          )}
-        </ul>
-      </div>
+            ))}
+          </>
+        )}
+      </ul>
     </nav>
-  );
+  </aside>
+);
 }

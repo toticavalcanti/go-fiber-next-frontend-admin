@@ -23,7 +23,7 @@ export default function ProductsPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const data = await api.get<ProductsResponse>(`/products?page=${page}`);
+        const data = await api.get<ProductsResponse>(`/admin/products?page=${page}`);
         setProducts(data.data);
         setLastPage(data.meta.last_page);
       } catch (error) {
@@ -37,7 +37,7 @@ export default function ProductsPage() {
   const handleDelete = async (id: number) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        await api.delete<void>(`/products/${id}`);
+        await api.delete<void>(`/admin/products/${id}`);
         setProducts(products.filter(p => p.id !== id));
       } catch (error) {
         console.error('Error deleting product:', error);
@@ -65,6 +65,10 @@ export default function ProductsPage() {
               <th scope="col">Title</th>
               <th scope="col">Description</th>
               <th scope="col">Price</th>
+              <th scope="col">Stock</th>
+              <th scope="col">Category</th>
+              <th scope="col">Status</th>
+              <th scope="col">Featured</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -78,7 +82,19 @@ export default function ProductsPage() {
                 </td>
                 <td>{product.title}</td>
                 <td>{product.description}</td>
-                <td>{product.price}</td>
+                <td>${product.price.toFixed(2)}</td>
+                <td>{product.stock}</td>
+                <td>{product.category?.name}</td>
+                <td>
+                  <span className={`badge ${product.active ? 'bg-success' : 'bg-danger'}`}>
+                    {product.active ? 'Active' : 'Inactive'}
+                  </span>
+                </td>
+                <td>
+                  <span className={`badge ${product.featured ? 'bg-primary' : 'bg-secondary'}`}>
+                    {product.featured ? 'Featured' : 'Regular'}
+                  </span>
+                </td>
                 <td>
                   <div className="btn-group">
                     <Link 

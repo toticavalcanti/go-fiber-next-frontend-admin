@@ -1,0 +1,23 @@
+/* src/app/dashboard/styles.module.css */
+
+.containerFluid {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .grid {
+    display: grid;
+    gap: 1rem;
+  }
+  
+  .chartContainer {
+    height: 400px; /* Altura fixa para o gráfico */
+    width: 100%;
+  }
+  

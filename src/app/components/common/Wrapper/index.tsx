@@ -14,11 +14,13 @@ interface LayoutProps {
 }
 
 interface UserResponse {
-  id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  role: Role; // Certifique-se de que `role` está bem definido
+  data: {
+    id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    role: Role;
+  };
 }
 
 export default function DashboardLayout({ children }: LayoutProps) {
@@ -29,43 +31,52 @@ export default function DashboardLayout({ children }: LayoutProps) {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const data: UserResponse = await api.get('/user'); // Define o tipo da resposta diretamente
+        const response = await api.get<UserResponse>('/user');
+        const userData = response.data; // Acessa os dados dentro de data
+
+        if (!userData || !userData.id) {
+          throw new Error('Invalid user data');
+        }
 
         dispatch(
           loginSuccess({
             user: {
-              id: data.id,
-              first_name: data.first_name,
-              last_name: data.last_name,
-              email: data.email,
-              role: { id: data.role.id, name: data.role.name },
+              id: userData.id,
+              first_name: userData.first_name,
+              last_name: userData.last_name,
+              email: userData.email,
+              role: { id: userData.role.id, name: userData.role.name },
             },
-            token: 'your-token-here', // Substitua por lógica real, se necessário
+            token: localStorage.getItem('token') || '', // Pega o token do localStorage
           })
         );
       } catch (err) {
-        console.error('Error fetching user:', err); // Log do erro no console
-        dispatch(loginFailure({ error: 'Authentication failed' })); // Corrige a chamada da action
-        router.push('/auth/login');
+        console.error('Error fetching user:', err);
+        dispatch(loginFailure({ error: 'Authentication failed' }));
+        router.push('/login');
       }
     };
 
-    getUser();
-  }, [dispatch, router]);
+    if (!isAuthenticated) {
+      getUser();
+    }
+  }, [dispatch, router, isAuthenticated]);
 
   if (!isAuthenticated) {
-    return null; // Retorna null enquanto a autenticação não é confirmada
+    return null;
   }
 
   return (
-    <>
-      <Nav />
-      <div className="container-fluid">
-        <div className="row">
-          <Menu />
-          <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">{children}</main>
-        </div>
+    <div className="min-h-screen bg-gray-100">
+      <Nav /> {/* Navbar no topo */}
+      
+      <div className="flex">
+        <Menu /> Menu lateral
+        
+        <main className="flex-1 ml-64 pt-16 px-8 py-6"> {/* Conteúdo principal */}
+          {children}
+        </main>
       </div>
-    </>
+    </div>
   );
 }

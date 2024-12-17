@@ -4,9 +4,8 @@ import { ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppSelector, useAppDispatch } from '@/app/lib/store/configureStore';
 import { api } from '@/app/lib/api/fetch';
-import Nav from '@/app/components/common/Nav';
-import Menu from '@/app/components/common/Menu';
 import { loginSuccess, loginFailure } from '@/app/lib/store/actions/authActions';
+import type { Role } from '@/app/types/role';
 
 interface LayoutProps {
   children: ReactNode;
@@ -17,7 +16,7 @@ interface UserResponse {
   first_name: string;
   last_name: string;
   email: string;
-  role: string;
+  role: Role; // Agora recebe o objeto completo
 }
 
 export default function DashboardLayout({ children }: LayoutProps) {
@@ -28,24 +27,29 @@ export default function DashboardLayout({ children }: LayoutProps) {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const data: UserResponse = await api.get<UserResponse>('/user'); // Define explicitamente o tipo esperado da resposta
-
+        const response = await api.get<{ data: UserResponse }>('/user');
+        const userData = response.data;
+    
+        if (!userData || !userData.id) {
+          throw new Error('Invalid user data');
+        }
+    
         dispatch(
           loginSuccess({
             user: {
-              id: data.id,
-              first_name: data.first_name,
-              last_name: data.last_name,
-              email: data.email,
-              role: data.role,
+              id: userData.id,
+              first_name: userData.first_name,
+              last_name: userData.last_name,
+              email: userData.email,
+              role: userData.role,
             },
-            token: '', // Insira um token real, se necessário
+            token: '', // O token já deve estar armazenado do login
           })
         );
       } catch (err) {
-        console.error('Error fetching user:', err); // Loga o erro no console
-        dispatch(loginFailure({ error: 'Authentication failed' })); // Corrige o tipo da action
-        router.push('/auth/login');
+        console.error('Error fetching user:', err);
+        dispatch(loginFailure({ error: 'Authentication failed' }));
+        router.push('/login');
       }
     };
 
@@ -60,9 +64,8 @@ export default function DashboardLayout({ children }: LayoutProps) {
 
   return (
     <div className="container-fluid">
-      <Nav />
+
       <div className="row">
-        <Menu />
         <main className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
           {children}
         </main>
