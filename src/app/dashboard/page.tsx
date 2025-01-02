@@ -9,11 +9,12 @@ import type {
   AgeAnalyticsResponse,
   CountryAnalyticsResponse,
 } from '@/app/types/chart-data';
-import BarChart from '../components/charts/BarChart';
-import PieChart from '../components/charts/PieChart';
-import LineChart from '../components/charts/LineChart';
-import HorizontalBarChart from '../components/charts/HorizontalBarChart';
 import CountryTable from '../components/dashboard/CountryTable';
+import MetricsCards from '../components/dashboard/MetricsCards';
+import SalesAnalysis from '../components/dashboard/SalesAnalysis';
+import ChannelDistribution from '../components/dashboard/ChannelsDistribution';
+import Demographics from '../components/dashboard/Demographics';
+import RevenueChart from '../components/dashboard/RevenueChart';
 
 const Dashboard = () => {
   const [salesData, setSalesData] = useState<ChartData[]>([]);
@@ -101,124 +102,21 @@ const Dashboard = () => {
 
   return (
     <Wrapper>
-      {/* Metrics Section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-sm font-medium text-gray-500 uppercase">
-            Total Sales
-          </h3>
-          <p className="mt-2 text-3xl font-bold text-gray-900">
-            {new Intl.NumberFormat('en-US', {
-              style: 'currency',
-              currency: 'USD',
-            }).format(metrics.totalSales)}
-          </p>
-          <span className="text-sm text-green-600">
-            +{metrics.salesGrowth}% from last month
-          </span>
-        </div>
-
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-sm font-medium text-gray-500 uppercase">
-            Total Orders
-          </h3>
-          <p className="mt-2 text-3xl font-bold text-gray-900">
-            {metrics.totalOrders}
-          </p>
-          <span className="text-sm text-green-600">
-            +{metrics.ordersGrowth}% from last month
-          </span>
-        </div>
-
-        <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-sm font-medium text-gray-500 uppercase">
-            Active Users
-          </h3>
-          <p className="mt-2 text-3xl font-bold text-gray-900">
-            {metrics.activeUsers}
-          </p>
-          <span className="text-sm text-green-600">
-            +{metrics.usersGrowth}% from last month
-          </span>
-        </div>
+    <MetricsCards metrics={metrics} />
+    
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <SalesAnalysis data={salesData} />
+      <ChannelDistribution data={salesData} />
+      <Demographics data={ageData} />
+      <div className="bg-white rounded-lg shadow p-6">
+        <h2 className="text-lg font-medium text-gray-900 mb-4">
+          Sales by Country
+        </h2>
+        <CountryTable data={countryData} />
       </div>
-
-      {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">
-            Sales Analysis
-          </h2>
-          <div className="h-[300px]">
-            <BarChart
-              data={salesData.map((item) => ({
-                date: item.date,
-                sum:
-                  typeof item.sum === 'number'
-                    ? item.sum
-                    : parseFloat(item.sum),
-              }))}
-            />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">Channels</h2>
-          <div className="h-[300px]">
-            <PieChart
-              data={salesData.map((item) => ({
-                source: item.date,
-                orders:
-                  typeof item.sum === 'number'
-                    ? item.sum
-                    : parseFloat(item.sum),
-                revenue:
-                  typeof item.sum === 'number'
-                    ? item.sum
-                    : parseFloat(item.sum),
-                customers:
-                  (typeof item.sum === 'number'
-                    ? item.sum
-                    : parseFloat(item.sum)) * 0.1,
-              }))}
-            />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">
-            Sales by Age
-          </h2>
-          <div className="h-[300px]">
-            <HorizontalBarChart data={ageData} title="" />
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">
-            Sales by Country
-          </h2>
-          <CountryTable data={countryData} />
-        </div>
-
-        <div className="lg:col-span-2 bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">
-            Revenue Trend
-          </h2>
-          <div className="h-[300px]">
-            <LineChart
-              data={salesData.map((item) => ({
-                date: item.date,
-                sum:
-                  typeof item.sum === 'number'
-                    ? item.sum
-                    : parseFloat(item.sum),
-              }))}
-            />
-          </div>
-        </div>
-      </div>
-    </Wrapper>
+      <RevenueChart data={salesData} />
+    </div>
+  </Wrapper>
   );
 };
 
