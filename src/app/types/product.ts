@@ -1,6 +1,4 @@
-// src/app/types/product.ts
-
-// Interface for product category
+//path: src/app/types/product.ts
 export interface Category {
   id: number;
   name: string;
@@ -8,7 +6,6 @@ export interface Category {
   slug?: string;
 }
 
-// Product base interface
 export interface Product {
   id: number;
   title: string;
@@ -24,11 +21,23 @@ export interface Product {
   updated_at?: string;
 }
 
-// Interface that extends Product for analytics
-export interface ProductAnalytics extends Product {
-  orders: number;
-  totalValue: number;
+// Interface específica para o endpoint de top products
+export interface TopProduct {
+  id: number;
+  name: string;
+  sales: number;
+  revenue: number;
+  stock_level: number;
+}
+
+// Interface estendida para analytics
+export interface TopProductAnalytics extends TopProduct {
+  image?: string;
   adsSpent: number;
   refunds: number;
   refundTrend: 'up' | 'down' | 'neutral';
+  category?: {
+    id: number;
+    name: string;
+  };
 }
