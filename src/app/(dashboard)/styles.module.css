@@ -1,0 +1,13 @@
+.wrapper {
+  min-height: 100vh;
+  background-color: rgb(243 244 246);
+}
+
+.main {
+  padding-left: 12rem; /* equivalente a pl-48 */
+  padding-top: 4rem;   /* equivalente a pt-16 */
+}
+
+.content {
+  padding: 2rem;       /* equivalente a p-8 */
+}

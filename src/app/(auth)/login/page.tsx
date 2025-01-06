@@ -47,7 +47,7 @@ export default function Login() {
       });
   
       // Redirecionar para o dashboard
-      router.push('/dashboard');
+      router.push('/overview');
     } catch (err) {
       console.error('Login Error:', err);
       setError(err instanceof Error ? err.message : 'An unexpected error occurred');

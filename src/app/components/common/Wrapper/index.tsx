@@ -1,78 +1,14 @@
-'use client';
-
-import { ReactNode, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAppSelector, useAppDispatch } from '@/app/lib/store/configureStore';
-import { api } from '@/app/lib/api/fetch';
-import { loginSuccess, loginFailure } from '@/app/lib/store/actions/authActions';
-import type { Role } from '@/app/types/role';
-import Menu from '@/app/components/common/Menu';
-import Nav from '@/app/components/common/Nav';
-
-interface LayoutProps {
-  children: ReactNode;
+//path: src/app/components/common/Wrapper/index.tsx
+interface WrapperProps {
+  children: React.ReactNode;
 }
 
-interface UserResponse {
-  id: number;
-  first_name: string;
-  last_name: string;
-  email: string;
-  role: Role;
-}
-
-export default function DashboardLayout({ children }: LayoutProps) {
-  const router = useRouter();
-  const dispatch = useAppDispatch();
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
-
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const response = await api.get<{ data: UserResponse }>('/user');
-        const userData = response.data;
-
-        if (!userData || !userData.id) {
-          throw new Error('Invalid user data');
-        }
-
-        dispatch(
-          loginSuccess({
-            user: {
-              id: userData.id,
-              first_name: userData.first_name,
-              last_name: userData.last_name,
-              email: userData.email,
-              role: userData.role,
-            },
-            token: '',
-          })
-        );
-      } catch (err) {
-        console.error('Error fetching user:', err);
-        dispatch(loginFailure({ error: 'Authentication failed' }));
-        router.push('/login');
-      }
-    };
-
-    if (!isAuthenticated) {
-      getUser();
-    }
-  }, [dispatch, router, isAuthenticated]);
-
-  if (!isAuthenticated) {
-    return null;
-  }
-
+const Wrapper = ({ children }: WrapperProps) => {
   return (
-    <div className="flex h-screen bg-gray-100">
-      <Menu />
-      <div className="flex-1 min-w-0">
-        <Nav />
-        <main className="p-8 mt-16">
-          {children}
-        </main>
-      </div>
+    <div className="h-full w-full space-y-6">
+      {children}
     </div>
   );
-}
+};
+
+export default Wrapper;

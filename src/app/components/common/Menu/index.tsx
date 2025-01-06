@@ -1,4 +1,4 @@
-// src/app/components/common/Menu/index.tsx
+//path: src/app/components/common/Menu/index.tsx
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
@@ -38,18 +38,18 @@ export default function Menu() {
   const pathname = usePathname();
 
   const menuItems = [
-    { href: "/dashboard", icon: <LayoutDashboard size={20} />, text: "Dashboard" },
-    { href: "/dashboard/orders", icon: <ShoppingCart size={20} />, text: "Orders" },
-    { href: "/dashboard/products", icon: <Package size={20} />, text: "Products" },
-    { href: "/dashboard/customers", icon: <Users size={20} />, text: "Customers" },
-    { href: "/dashboard/analytics", icon: <BarChart2 size={20} />, text: "Analytics" },
-    { href: "/dashboard/marketing", icon: <Megaphone size={20} />, text: "Marketing" },
-    { href: "/dashboard/inventory", icon: <BoxesIcon size={20} />, text: "Inventory" },
+    { href: "/overview", icon: <LayoutDashboard size={20} />, text: "Overview" },
+    { href: "/orders", icon: <ShoppingCart size={20} />, text: "Orders" },
+    { href: "/products", icon: <Package size={20} />, text: "Products" },
+    { href: "/customers", icon: <Users size={20} />, text: "Customers" },
+    { href: "/analytics", icon: <BarChart2 size={20} />, text: "Analytics" },
+    { href: "/marketing", icon: <Megaphone size={20} />, text: "Marketing" },
+    { href: "/inventory", icon: <BoxesIcon size={20} />, text: "Inventory" },
   ];
 
   const settingsItems = [
-    { href: "/dashboard/settings/users", icon: <UserCog size={20} />, text: "Users" },
-    { href: "/dashboard/settings/roles", icon: <ShieldCheck size={20} />, text: "Roles" },
+    { href: "/settings/users", icon: <UserCog size={20} />, text: "Users" },
+    { href: "/settings/roles", icon: <ShieldCheck size={20} />, text: "Roles" },
   ];
 
   return (

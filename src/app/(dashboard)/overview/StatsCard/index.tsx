@@ -1,5 +1,5 @@
 // src/app/components/dashboard/StatsCard.tsx
-import { Card } from "@/app/components/common/ui/card";
+import { Card } from "@/app/components/common/ui/card/card";
 
 import { cn } from "@/app/types/style";
 import { ReactNode } from 'react';

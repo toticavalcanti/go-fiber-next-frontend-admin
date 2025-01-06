@@ -1,4 +1,4 @@
-//path: src/app/dashboard/page.tsx
+//path: src/app/overview/page.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -11,15 +11,15 @@ import type {
  CountryAnalyticsResponse,
 } from '@/app/types/chart-data';
 import type { TopProduct, TopProductAnalytics } from '@/app/types/product';
-import CountryTable from '../components/dashboard/CountryTable';
-import MetricsCards from '../components/dashboard/MetricsCards';
-import SalesAnalysis from '../components/dashboard/SalesAnalysis';
-import ChannelDistribution from '../components/dashboard/ChannelsDistribution';
-import Demographics from '../components/dashboard/Demographics';
-import RevenueChart from '../components/dashboard/RevenueChart';
-import TopProducts from '../components/dashboard/TopProducts';
+import CountryTable from '../../components/overview/CountryTable';
+import MetricsCards from '../../components/overview/MetricsCards';
+import SalesAnalysis from '../../components/overview/SalesAnalysis';
+import ChannelDistribution from '../../components/overview/ChannelsDistribution';
+import Demographics from '../../components/overview/Demographics';
+import RevenueChart from '../../components/overview/RevenueChart';
+import TopProducts from '../../components/overview/TopProducts';
 
-const Dashboard = () => {
+const Overview = () => {
  const [salesData, setSalesData] = useState<ChartData[]>([]);
  const [ageData, setAgeData] = useState<{ label: string; value: number }[]>([]);
  const [countryData, setCountryData] = useState<{
@@ -114,7 +114,7 @@ const Dashboard = () => {
          usersGrowth: 19,
        });
      } catch (error) {
-       console.error('Error fetching dashboard data:', error);
+       console.error('Error fetching overview data:', error);
      }
    };
 
@@ -123,23 +123,23 @@ const Dashboard = () => {
 
  return (
    <Wrapper>
-     <MetricsCards metrics={metrics} />
-     
-     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-       <SalesAnalysis data={salesData} />
-       <ChannelDistribution data={salesData} />
-       <Demographics data={ageData} />
-       <div className="bg-white rounded-lg shadow p-6">
-         <h2 className="text-lg font-medium text-gray-900 mb-4">
-           Sales by Country
-         </h2>
-         <CountryTable data={countryData} />
-       </div>
-       <RevenueChart data={salesData} />
-       <TopProducts products={topProducts} />
-     </div>
-   </Wrapper>
+      <MetricsCards metrics={metrics} />
+      
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <SalesAnalysis data={salesData} />
+        <ChannelDistribution data={salesData} />
+        <Demographics data={ageData} />
+        <div className="bg-white rounded-lg shadow p-6">
+          <h2 className="text-lg font-medium text-gray-900 mb-4">
+            Sales by Country
+          </h2>
+          <CountryTable data={countryData} />
+        </div>
+        <RevenueChart data={salesData} />
+        <TopProducts products={topProducts} />
+      </div>
+    </Wrapper>
  );
 };
 
-export default Dashboard;
+export default Overview;

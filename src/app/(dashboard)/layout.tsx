@@ -1,3 +1,4 @@
+//path: src/app/(dashboard)/layout.tsx
 'use client';
 
 import { ReactNode, useEffect } from 'react';
@@ -65,16 +66,14 @@ export default function DashboardLayout({ children }: LayoutProps) {
   }
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100">
+      <Nav />
       <Menu />
-      <div className="flex-1 relative ml-48">
-        <Nav />
-        <main className="p-6 mt-16 overflow-auto h-[calc(100vh-5rem)] bg-gray-100">
-          <div className="max-w-7xl mx-auto space-y-6">
-            {children}
-          </div>
-        </main>
-      </div>
+      <main className="ml-8 pt-8">
+        <div className="p-6">
+          {children}
+        </div>
+      </main>
     </div>
   );
 }

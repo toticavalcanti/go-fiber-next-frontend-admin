@@ -1,0 +1,13 @@
+//path: src/app/products/styles.module.css
+/* Estilos específicos que complementam o Tailwind */
+.tableWrapper {
+  @apply overflow-x-auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.textTruncate {
+  max-width: 24rem; /* 384px */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

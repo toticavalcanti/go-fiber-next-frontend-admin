@@ -1,4 +1,4 @@
-/* src/app/dashboard/styles.module.css */
+/* path: src/app/(dashboard)/overview/styles.module.css */
 
 .containerFluid {
   width: 100%;
@@ -17,6 +17,6 @@
 }
 
 .chartContainer {
-  height: 400px; /* Altura fixa para o gráfico */
+  height: 400px; /* Fixed height for the chart */
   width: 100%;
 }
