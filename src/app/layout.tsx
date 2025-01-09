@@ -15,7 +15,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Dashboard</title>
       </head>
-      <body className="bg-gray-100 text-gray-900 antialiased">
+      <body className="bg-gray-100 text-gray-900 antialiased h-screen overflow-hidden">
         <Providers>
           {children}
         </Providers>

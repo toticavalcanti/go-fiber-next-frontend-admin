@@ -1,4 +1,3 @@
-//path: src/app/(dashboard)/products/page.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -65,17 +64,7 @@ export default function ProductsPage() {
           className="w-full h-full rounded object-cover"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
-            const container = target.parentElement;
-            if (container) {
-              container.innerHTML = `
-                <div class="h-8 w-8 rounded bg-gray-100 flex items-center justify-center">
-                  <svg class="w-4 h-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                    <circle cx="8.5" cy="8.5" r="1.5"/>
-                    <polyline points="21 15 16 10 5 21"/>
-                  </svg>
-                </div>`;
-            }
+            target.src = '/no-image.png'; // Default image fallback
           }}
         />
       </div>
@@ -87,9 +76,9 @@ export default function ProductsPage() {
   );
 
   return (
-    <div className="bg-white rounded-lg shadow">
+    <div className="flex flex-col h-full ml-4">
       {/* Header */}
-      <div className="p-4 border-b border-gray-200">
+      <div className="p-4 border-b border-gray-200 bg-white">
         <div className="flex flex-col space-y-4 sm:flex-row sm:justify-between sm:space-y-0 sm:items-center">
           <input
             type="text"
@@ -119,89 +108,91 @@ export default function ProductsPage() {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead className="bg-gray-50 text-xs uppercase">
-            <tr>
-              <th className="px-3 py-2 text-left font-medium text-gray-500">Title</th>
-              <th className="hidden md:table-cell px-3 py-2 text-left font-medium text-gray-500">Description</th>
-              <th className="px-3 py-2 text-left font-medium text-gray-500">Price</th>
-              <th className="hidden sm:table-cell px-3 py-2 text-left font-medium text-gray-500">Stock</th>
-              <th className="hidden lg:table-cell px-3 py-2 text-left font-medium text-gray-500">Category</th>
-              <th className="px-3 py-2 text-left font-medium text-gray-500">Status</th>
-              <th className="hidden sm:table-cell px-3 py-2 text-left font-medium text-gray-500">Featured</th>
-              <th className="px-3 py-2 text-right font-medium text-gray-500">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200">
-            {filteredProducts.map((product) => (
-              <tr key={product.id} className="hover:bg-gray-50">
-                <td className="px-3 py-2">
-                  <div className="flex items-center gap-2">
-                    {renderProductImage(product)}
-                    <span className="text-sm font-medium text-gray-900 truncate max-w-[150px]">
-                      {product.title}
-                    </span>
-                  </div>
-                </td>
-                <td className="hidden md:table-cell px-3 py-2">
-                  <p className="text-sm text-gray-500 truncate max-w-[200px]">
-                    {product.description}
-                  </p>
-                </td>
-                <td className="px-3 py-2">
-                  <span className="text-sm font-medium">${product.price.toFixed(2)}</span>
-                </td>
-                <td className="hidden sm:table-cell px-3 py-2">
-                  <span className="text-sm">{product.stock}</span>
-                </td>
-                <td className="hidden lg:table-cell px-3 py-2">
-                  <span className="text-sm truncate max-w-[150px]">{product.category?.name}</span>
-                </td>
-                <td className="px-3 py-2">
-                  <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
-                    product.active 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-red-100 text-red-800'
-                  }`}>
-                    {product.active ? 'Active' : 'Inactive'}
-                  </span>
-                </td>
-                <td className="hidden sm:table-cell px-3 py-2">
-                  <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
-                    product.featured 
-                      ? 'bg-blue-100 text-blue-800' 
-                      : 'bg-gray-100 text-gray-800'
-                  }`}>
-                    {product.featured ? 'Featured' : 'Regular'}
-                  </span>
-                </td>
-                <td className="px-3 py-2">
-                  <div className="flex justify-end items-center gap-1">
-                    <Link
-                      href={`/products/${product.id}/edit`}
-                      className="p-1 text-gray-500 hover:text-blue-600 transition-colors"
-                      title="Edit"
-                    >
-                      <Pencil className="w-4 h-4" />
-                    </Link>
-                    <button
-                      onClick={() => handleDelete(product.id)}
-                      className="p-1 text-gray-500 hover:text-red-600 transition-colors"
-                      title="Delete"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </td>
+      <div className="flex-1 overflow-auto bg-white">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50 text-xs uppercase">
+              <tr>
+                <th className="px-3 py-2 text-left font-medium text-gray-500">Title</th>
+                <th className="hidden md:table-cell px-3 py-2 text-left font-medium text-gray-500">Description</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-500">Price</th>
+                <th className="hidden sm:table-cell px-3 py-2 text-left font-medium text-gray-500">Stock</th>
+                <th className="hidden lg:table-cell px-3 py-2 text-left font-medium text-gray-500">Category</th>
+                <th className="px-3 py-2 text-left font-medium text-gray-500">Status</th>
+                <th className="hidden sm:table-cell px-3 py-2 text-left font-medium text-gray-500">Featured</th>
+                <th className="px-3 py-2 text-right font-medium text-gray-500">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {filteredProducts.map((product) => (
+                <tr key={product.id} className="hover:bg-gray-50">
+                  <td className="px-3 py-2">
+                    <div className="flex items-center gap-2">
+                      {renderProductImage(product)}
+                      <span className="text-sm font-medium text-gray-900 truncate max-w-[150px]">
+                        {product.title}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="hidden md:table-cell px-3 py-2">
+                    <p className="text-sm text-gray-500 truncate max-w-[200px]">
+                      {product.description}
+                    </p>
+                  </td>
+                  <td className="px-3 py-2">
+                    <span className="text-sm font-medium">${product.price.toFixed(2)}</span>
+                  </td>
+                  <td className="hidden sm:table-cell px-3 py-2">
+                    <span className="text-sm">{product.stock}</span>
+                  </td>
+                  <td className="hidden lg:table-cell px-3 py-2">
+                    <span className="text-sm truncate max-w-[150px]">{product.category?.name}</span>
+                  </td>
+                  <td className="px-3 py-2">
+                    <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
+                      product.active 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-red-100 text-red-800'
+                    }`}>
+                      {product.active ? 'Active' : 'Inactive'}
+                    </span>
+                  </td>
+                  <td className="hidden sm:table-cell px-3 py-2">
+                    <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
+                      product.featured 
+                        ? 'bg-blue-100 text-blue-800' 
+                        : 'bg-gray-100 text-gray-800'
+                    }`}>
+                      {product.featured ? 'Featured' : 'Regular'}
+                    </span>
+                  </td>
+                  <td className="px-3 py-2">
+                    <div className="flex justify-end items-center gap-1">
+                      <Link
+                        href={`/products/${product.id}/edit`}
+                        className="p-1 text-gray-500 hover:text-blue-600 transition-colors"
+                        title="Edit"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(product.id)}
+                        className="p-1 text-gray-500 hover:text-red-600 transition-colors"
+                        title="Delete"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Pagination */}
-      <div className="px-6 py-4 border-t border-gray-200">
+      <div className="px-6 py-4 border-t border-gray-200 bg-white">
         <div className="flex justify-between items-center">
           <p className="text-sm text-gray-500">
             Showing {filteredProducts.length} items

@@ -10,7 +10,8 @@ import {
   BoxesIcon,
   UserCog,
   ShieldCheck,
-  Settings
+  Settings,
+  FolderOpen
 } from "lucide-react";
 import Link from "next/link";
 
@@ -41,6 +42,7 @@ export default function Menu() {
     { href: "/overview", icon: <LayoutDashboard size={20} />, text: "Overview" },
     { href: "/orders", icon: <ShoppingCart size={20} />, text: "Orders" },
     { href: "/products", icon: <Package size={20} />, text: "Products" },
+    { href: "/categories", icon: <FolderOpen size={20} />, text: "Categories" }, // Novo item
     { href: "/customers", icon: <Users size={20} />, text: "Customers" },
     { href: "/analytics", icon: <BarChart2 size={20} />, text: "Analytics" },
     { href: "/marketing", icon: <Megaphone size={20} />, text: "Marketing" },
