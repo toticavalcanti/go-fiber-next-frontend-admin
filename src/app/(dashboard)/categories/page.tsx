@@ -21,13 +21,13 @@ export default function CategoriesPage() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await api.get<{ data: Category[] }>('/admin/categories');
-        setCategories(response.data || []);
+        const response = await api.get<{ data: { categories: Category[] } }>('/admin/categories');
+        setCategories(response.data.categories || []);
       } catch (error) {
         console.error('Error fetching categories:', error);
       }
     };
-
+  
     fetchCategories();
   }, []);
 
@@ -47,7 +47,7 @@ export default function CategoriesPage() {
 
   return (
     <Wrapper>
-      <Card className="max-w-5xl mx-auto ml-44">
+      <Card className="max-w-5xl mx-auto ml-40">
         <div className="p-6">
           {/* Header */}
           <div className="flex justify-between items-center mb-6">

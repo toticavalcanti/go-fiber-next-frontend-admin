@@ -1,32 +1,49 @@
-// path: src/app/categories/create/page.tsx
 'use client';
 
-import { SyntheticEvent, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
 import { api } from '@/app/lib/api/fetch';
 import Wrapper from '@/app/components/common/Wrapper';
 import { Card } from '@/app/components/common/ui/card/card';
 import { toast } from 'react-toastify';
 
-export default function CreateCategoryPage() {
+export default function EditCategoryPage() {
   const router = useRouter();
+  const params = useParams();
+  const { id } = params;
+
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
-  const handleSubmit = async (e: SyntheticEvent) => {
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        const response = await api.get<{ data: { name: string; description: string } }>(`/admin/categories/${id}`);
+        setName(response.data.name);
+        setDescription(response.data.description);
+      } catch (error) {
+        console.error('Error fetching category:', error);
+        toast.error('Failed to fetch category details.');
+      }
+    };
+
+    fetchCategory();
+  }, [id]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      await api.post<void, { name: string; description: string }>('/admin/categories', {
+      await api.put<void, { name: string; description: string }>(`/admin/categories/${id}`, {
         name,
         description,
       });
 
-      toast.success('Category created successfully!');
+      toast.success('Category updated successfully!');
       router.push('/categories');
     } catch (error) {
-      console.error('Error creating category:', error);
-      toast.error('Error creating category. Please try again.');
+      console.error('Error updating category:', error);
+      toast.error('Failed to update category.');
     }
   };
 
@@ -34,7 +51,7 @@ export default function CreateCategoryPage() {
     <Wrapper>
       <Card className="max-w-3xl mx-auto">
         <div className="p-6">
-          <h2 className="text-xl font-semibold mb-6">Add New Category</h2>
+          <h2 className="text-xl font-semibold mb-6">Edit Category</h2>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium mb-2">Category Name</label>
@@ -67,7 +84,7 @@ export default function CreateCategoryPage() {
                 type="submit"
                 className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
-                Add Category
+                Save Changes
               </button>
             </div>
           </form>

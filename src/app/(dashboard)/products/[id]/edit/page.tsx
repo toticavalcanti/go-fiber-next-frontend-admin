@@ -8,6 +8,7 @@ import Wrapper from "@/app/components/common/Wrapper";
 import { use } from "react";
 import { Card } from "@/app/components/common/ui/card/card";
 import { ProductImage } from "@/app/components/common/ProductImage";
+import { toast } from 'react-toastify';
 
 interface Category {
   id: number;
@@ -51,9 +52,8 @@ export default function EditProductPage({
           data: { categories: Category[] };
         }>("/admin/categories");
 
-        console.log("Categories Response:", categoriesResponse); // Log para verificar o formato
+        console.log("Categories Response:", categoriesResponse);
 
-        // Extraindo as categorias do formato correto
         if (categoriesResponse?.data?.categories) {
           setCategories(categoriesResponse.data.categories);
         } else {
@@ -108,7 +108,7 @@ export default function EditProductPage({
         {
           title: string;
           description: string;
-          images: string[]; // Lista de URLs de imagens
+          images: string[];
           price: number;
           stock: number;
           category_id: number;
@@ -118,7 +118,7 @@ export default function EditProductPage({
       >(`/admin/products/${resolvedParams.id}`, {
         title,
         description,
-        images, // Envia a lista de imagens
+        images,
         price,
         stock,
         category_id: categoryId,
@@ -126,9 +126,11 @@ export default function EditProductPage({
         featured,
       });
 
+      toast.success("Product updated successfully!");
       router.push("/products");
     } catch (error) {
       console.error("Error updating product:", error);
+      toast.error("Failed to update product. Please try again.");
     }
   };
 
@@ -169,7 +171,7 @@ export default function EditProductPage({
                   <label className="block text-sm font-medium">Category</label>
                   <button
                     type="button"
-                    onClick={() => router.push("/categories/create")} // Redireciona para a página de criação de categoria
+                    onClick={() => router.push("/categories/create")}
                     className="px-3 py-1 text-sm font-medium text-blue-600 bg-white border border-blue-600 rounded-md hover:bg-blue-100"
                   >
                     + Add Category
